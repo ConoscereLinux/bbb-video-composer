@@ -36,10 +36,16 @@ class Downloader:
 
     def download(self, endpoint: str):
         url = urllib.parse.urljoin(self._base, f"/presentation/{self._id}/{endpoint}")
+
         out = self.out_dir / endpoint
+        if out.exists():
+            return out
+
+        out.parent.mkdir(parents=True, exist_ok=True)
         with open(out, "wb") as fp:
             response = requests.get(url, allow_redirects=True)
             fp.write(response.content)
+
         return out
 
     def download_all(self):
