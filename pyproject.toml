@@ -9,9 +9,9 @@ name = "bbb-video-composer"
 version = "0.0.0"
 requires-python = ">=3.7"
 dependencies = [
-    "moviepy",
     "click",
-    "loguru"
+    "loguru",
+    "moviepy",
 ]
 
 [project.optional-dependencies]
