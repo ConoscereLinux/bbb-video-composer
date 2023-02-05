@@ -26,7 +26,11 @@ class Composer:
 
         self._clips = []
 
-    def compose(self, duration: int = None):
+    def preview(self):
+        movie = moviepy.editor.CompositeVideoClip(self._clips, size=self.size)
+        movie.save_frame(str(self._base_dir / "out.png"), t=0)
+
+    def render(self, duration: int = None):
         if not self._clips:
             raise Exception("You need to add at least one clip")
 
