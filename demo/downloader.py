@@ -23,19 +23,23 @@ class Downloader:
         self._id = match.group("id")
         self._name = name if name else self._id
 
-        self.out_dir = DATA_PATH / self._name
-        self.out_dir.mkdir(exist_ok=True)
+        self._out_dir = DATA_PATH / self._name
+        self._out_dir.mkdir(exist_ok=True)
 
     @property
     def project_id(self) -> str:
         return self._id
 
+    @property
+    def root_path(self):
+        return self._out_dir
+
     def download(self, endpoint: str, skip_existing=True):
         url = urllib.parse.urljoin(self._base, f"/presentation/{self._id}/{endpoint}")
 
-        out = self.out_dir / endpoint
-        if not skip_existing and out.exists():
-            logger.info(f"{out} already exists, skipping")
+        out = self._out_dir / endpoint
+        if skip_existing and out.exists():
+            logger.info(f"(skipping) {out} already exists, skipping")
             return out
 
         out.parent.mkdir(parents=True, exist_ok=True)
@@ -43,7 +47,7 @@ class Downloader:
             response = requests.get(url, allow_redirects=True)
             fp.write(response.content)
 
-        logger.info(f"{out} downloaded")
+        logger.info(f"(downloaded) {out}")
         return out
 
     def download_all(self, skip_existing=True):
