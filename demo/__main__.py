@@ -30,6 +30,10 @@ class Downloader:
         self.out_dir = DATA_PATH / self._id
         self.out_dir.mkdir(exist_ok=True)
 
+    @property
+    def project_id(self) -> str:
+        return self._id
+
     def download(self, endpoint: str):
         url = urllib.parse.urljoin(self._base, f"/presentation/{self._id}/{endpoint}")
         out = self.out_dir / endpoint
