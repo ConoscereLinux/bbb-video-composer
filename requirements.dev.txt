@@ -30,6 +30,8 @@ iniconfig==2.0.0
     # via pytest
 isort==5.12.0
     # via bbb-video-composer (pyproject.toml)
+loguru==0.6.0
+    # via bbb-video-composer (pyproject.toml)
 moviepy==1.0.3
     # via bbb-video-composer (pyproject.toml)
 mypy-extensions==1.0.0
