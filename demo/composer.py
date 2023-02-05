@@ -36,6 +36,7 @@ class Composer:
             movie = movie.set_duration(duration)
 
         movie.write_videofile(str(self._base_dir / "out.mp4"))
+        # movie.save_frame(str(self._base_dir / "out.png"), t=0)
 
     def add_clip(self, clip: moviepy.editor.VideoClip, position: Position = None):
         if position:
