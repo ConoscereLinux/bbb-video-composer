@@ -29,33 +29,30 @@ def compose(project_id, bg_image):
 
     c = composer.Composer(project_id, size=size)
 
-    border = 40
+    webcam = (600, 450)
+    desk_share = (1220, 686)
+    # text_block = (480, (desk_share[1] - webcam[1]) // 2 - border)
 
-    webcam = (480, 360)
-    desk_share = (1280, 720)
-    text_block = (480, (desk_share[1] - webcam[1]) // 2 - border)
+    c.add_background_image(bg_image if bg_image else "assets/bg-clinux.png")
 
-    if bg_image:
-        c.add_background_image(bg_image)
+    c.add_desk_share(desk_share, (660, 190))
+    c.add_webcam(webcam, (40, 190))
 
-    c.add_webcam(webcam, (border, border))
-    c.add_desk_share(desk_share, (size[0] - desk_share[0] - border, border))
+    # c.add_text(
+    #     "A very very very \nvery long Title",
+    #     text_block,
+    #     (border, webcam[1] + 2 * border),
+    #     color=palette["white"],
+    #     bg_color=palette["blue"],
+    #     font="open-sans",
+    # )
 
-    c.add_text(
-        "A very very very \nvery long Title",
-        text_block,
-        (border, webcam[1] + 2 * border),
-        color=palette["white"],
-        bg_color=palette["blue"],
-        font="open-sans",
-    )
-
-    c.add_text(
-        "Name Surname",
-        text_block,
-        (border, webcam[1] + text_block[1] + 3 * border),
-        color=palette["white"],
-        bg_color=palette["blue"],
-    )
+    # c.add_text(
+    #     "Name Surname",
+    #     text_block,
+    #     (border, webcam[1] + text_block[1] + 3 * border),
+    #     color=palette["white"],
+    #     bg_color=palette["blue"],
+    # )
 
     c.compose(5)
