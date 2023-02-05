@@ -13,7 +13,7 @@ class Downloader:
         r"(?:playback\.html\?meetingId=)?(?P<id>\S+)$"
     )
 
-    def __init__(self, url: str):
+    def __init__(self, url: str, name: str = None):
         self._url = url
 
         if not (match := self.VALID_URL_REGEX.fullmatch(url)):
@@ -21,8 +21,9 @@ class Downloader:
 
         self._base = match.group("base")
         self._id = match.group("id")
+        self._name = name if name else self._id
 
-        self.out_dir = DATA_PATH / self._id
+        self.out_dir = DATA_PATH / self._name
         self.out_dir.mkdir(exist_ok=True)
 
     @property
