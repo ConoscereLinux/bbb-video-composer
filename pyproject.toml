@@ -8,7 +8,9 @@ include = ["demo"]
 name = "bbb-video-composer"
 version = "0.0.0"
 requires-python = ">=3.7"
-dependencies = []
+dependencies = [
+    "moviepy"
+]
 
 [project.optional-dependencies]
 dev = ["black", "isort"]
