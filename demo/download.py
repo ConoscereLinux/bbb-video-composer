@@ -2,6 +2,7 @@ import re
 import urllib.parse
 
 import requests
+from loguru import logger
 
 from .constants import DATA_PATH
 
@@ -28,11 +29,12 @@ class Downloader:
     def project_id(self) -> str:
         return self._id
 
-    def download(self, endpoint: str):
+    def download(self, endpoint: str, skip_existing=True):
         url = urllib.parse.urljoin(self._base, f"/presentation/{self._id}/{endpoint}")
 
         out = self.out_dir / endpoint
-        if out.exists():
+        if not skip_existing and out.exists():
+            logger.info(f"{out} already exists, skipping")
             return out
 
         out.parent.mkdir(parents=True, exist_ok=True)
@@ -40,10 +42,11 @@ class Downloader:
             response = requests.get(url, allow_redirects=True)
             fp.write(response.content)
 
+        logger.info(f"{out} downloaded")
         return out
 
-    def download_all(self):
-        self.download("metadata.xml")
+    def download_all(self, skip_existing=True):
+        self.download("metadata.xml", skip_existing)
 
         # doc = ET.parse(self.download("shapes.svg"))
         # for img in doc.iterfind(".//{http://www.w3.org/2000/svg}image"):
@@ -59,4 +62,4 @@ class Downloader:
             "video/webcams.webm",
             "deskshare/deskshare.webm",
         ):
-            self.download(endpoint)
+            self.download(endpoint, skip_existing)
