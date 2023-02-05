@@ -1,36 +1,66 @@
+import pathlib
 import xml.etree.ElementTree as ET
 
 import moviepy.editor
+import moviepy.video
 
 from .constants import DATA_PATH
 
+Size = tuple[int, int]
+Position = tuple[int, int]
+
+
+def hex_to_rgb(color: str):
+    color = color.lstrip("#")
+    if len(color) == 3:
+        color = color[0] * 2 + color[1] * 2 + color[2] * 2
+    return int(color[0:2], 16), int(color[2:4], 16), int(color[4:], 16)
+
 
 class Composer:
-    def __init__(self, project_id: str):
+    def __init__(self, project_id: str, size: tuple[int, int] = (1920, 1080)):
         self._id = project_id
         self._base_dir = DATA_PATH / self._id
 
-        self.size = (1920, 1080)
+        self.size = size
+
         self._clips = []
 
-        self._prepare_webcam()
-        self._prepare_deskshare()
+    def compose(self, duration: int = None):
+        if not self._clips:
+            raise Exception("You need to add at least one clip")
 
-    def compose(self):
-        if self._clips:
-            movie = moviepy.editor.CompositeVideoClip(self._clips, size=self.size)
-            movie = movie.set_duration(30)
-            movie.write_videofile(str(self._base_dir / "out.mp4"))
+        movie = moviepy.editor.CompositeVideoClip(self._clips, size=self.size)
 
-    def _prepare_webcam(self):
-        video_url = str(self._base_dir / "video" / "webcams.webm")
-        video = moviepy.editor.VideoFileClip(video_url)
-        self._clips.append(video)
+        if duration:
+            movie = movie.set_duration(duration)
 
-    def _prepare_deskshare(self):
+        movie.write_videofile(str(self._base_dir / "out.mp4"))
+
+    def add_clip(self, clip: moviepy.editor.VideoClip, position: Position = None):
+        if position:
+            clip = clip.set_position(position)
+        self._clips.append(clip)
+
+    def add_background_color(self, color: str):
+        color = hex_to_rgb(color)
+        self.add_clip(moviepy.editor.ColorClip(size=self.size, color=color))
+
+    def add_background_image(self, path: str):
+        if pathlib.Path(path).exists():
+            self.add_clip(moviepy.editor.ImageClip(path).resize(self.size))
+
+    def add_text(self, txt: str, size: Size, position: Position, **kwargs):
+        clip = moviepy.editor.TextClip(txt=txt, size=size, **kwargs)
+        self.add_clip(clip, position)
+
+    def add_webcam(self, size: Size, position: Position):
+        path = str(self._base_dir / "video" / "webcams.webm")
+        clip = moviepy.editor.VideoFileClip(path).resize(size)
+        self.add_clip(clip, position)
+
+    def add_desk_share(self, size: Size, position: Position):
         events = ET.parse(self._base_dir / "deskshare.xml").findall("./event")
-        if not events:
-            return
 
         video_url = str(self._base_dir / "deskshare" / "deskshare.webm")
         video = moviepy.editor.VideoFileClip(video_url)
@@ -38,5 +68,7 @@ class Composer:
         for event in events:
             t_start = float(event.get("start_timestamp"))
             t_stop = float(event.get("stop_timestamp"))
-            clip = video.subclip(t_start, t_stop)
-            self._clips.append(clip.set_position((self.size[0] - clip.size[0], 0)))
+
+            clip = video.subclip(t_start, t_stop).resize(size)
+
+            self.add_clip(clip, position)
