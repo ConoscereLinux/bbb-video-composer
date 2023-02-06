@@ -1,3 +1,4 @@
+import os
 import shutil
 
 import click
@@ -65,4 +66,4 @@ def compose(project_id, bg_image, title, relator, preview):
     if preview:
         c.preview()
     else:
-        c.render()
+        c.render(fps=24, threads=os.cpu_count())
