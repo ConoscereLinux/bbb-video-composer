@@ -1,3 +1,3 @@
 import pathlib
 
-DATA_PATH = pathlib.Path(".data")
+DATA_PATH = pathlib.Path("./data")
