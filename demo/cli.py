@@ -42,26 +42,26 @@ def clean(project_id):
 @click.option("--relator", default=None)
 @click.option("--preview/--no-preview", default=False)
 def compose(project_id, bg_image, title, relator, preview):
-    size = (1920, 1080)
+    size = (1280, 720)
     font = "Open-Sans-Regular"
 
     c = composer.Composer(project_id, size=size)
 
-    webcam = (600, 450)
-    desk_share = (1220, 686)
+    webcam = (400, 300)
+    desk_share = (813, 457)
 
-    c.add_background_image(bg_image if bg_image else "assets/bg-clinux.png")
+    c.add_background_image(bg_image if bg_image else "assets/bg-clinux_720p.png")
 
-    c.add_desk_share(desk_share, (660, 180))
-    c.add_webcam(webcam, (40, 180))
+    c.add_desk_share(desk_share, (440, 120))
+    c.add_webcam(webcam, (27, 120))
 
     if title:
         c.add_text(
-            title, (1820, 80), (40, 50), color="white", font=font, stroke_color="white"
+            title, (1226, 50), (27, 35), color="white", font=font, stroke_color="white"
         )
 
     if relator:
-        c.add_text(relator, (560, 80), (60, 720), color="white", font=font)
+        c.add_text(relator, (384, 54), (35, 480), color="white", font=font)
 
     if preview:
         c.preview()
