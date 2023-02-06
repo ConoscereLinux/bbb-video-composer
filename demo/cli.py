@@ -65,4 +65,4 @@ def compose(project_id, bg_image, title, relator, preview):
     if preview:
         c.preview()
     else:
-        c.render(5)
+        c.render()
