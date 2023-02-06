@@ -51,17 +51,16 @@ class Downloader:
         return out
 
     def download_all(self, skip_existing=True):
-        self.download("metadata.xml", skip_existing)
-
         # doc = ET.parse(self.download("shapes.svg"))
         # for img in doc.iterfind(".//{http://www.w3.org/2000/svg}image"):
         #     self.download(img.get("{http://www.w3.org/1999/xlink}href"))
 
         for endpoint in (
+            "metadata.xml",
             # "panzooms.xml",
             # "cursor.xml",
             "deskshare.xml",
-            "presentation_text.json",
+            # "presentation_text.json",
             # "captions.json",
             # "slides_new.xml",
             "video/webcams.webm",
