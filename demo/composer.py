@@ -23,20 +23,24 @@ class Composer:
         self._base_dir = DATA_PATH / self._id
 
         self.size = size
+        self.metadata = ET.parse(str(self._base_dir / "metadata.xml")).getroot()
 
         self._clips = []
+
+    @property
+    def duration(self):
+        return float(self.metadata.find("playback/duration").text) / 1000
 
     def preview(self):
         movie = moviepy.editor.CompositeVideoClip(self._clips, size=self.size)
         movie.save_frame(str(self._base_dir / "out.png"), t=0)
 
-    def render(self, duration: int = 0, **kwargs):
+    def render(self, duration: float = None, **kwargs):
         if not self._clips:
             raise Exception("You need to add at least one clip")
 
-        duration = max(duration, *(c.duration for c in self._clips if c.duration))
         movie = moviepy.editor.CompositeVideoClip(self._clips, size=self.size)
-        movie = movie.set_duration(duration)
+        movie = movie.set_duration(duration if duration else self.duration)
 
         movie.write_videofile(str(self._base_dir / "out.mp4"), **kwargs)
 
