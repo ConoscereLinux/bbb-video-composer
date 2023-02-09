@@ -39,6 +39,8 @@ class Composer:
         if not self._clips:
             raise Exception("You need to add at least one clip")
 
+        kwargs.setdefault("temp_audiofile", self._base_dir / "temp_audio.mp3")
+
         movie = moviepy.editor.CompositeVideoClip(self._clips, size=self.size)
         movie = movie.set_duration(duration if duration else self.duration)
 
