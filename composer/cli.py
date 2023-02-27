@@ -1,49 +1,44 @@
 import os
+import pathlib
 import shutil
 
-import click
-from loguru import logger
+import typer
 
 from . import composer, constants, downloader
 
 
-@click.group()
-def cli():
-    pass
+cli = typer.Typer()
 
 
 @cli.command()
-@click.option("--project-name", default=None)
-@click.argument("recording_url")
-@click.option("--skip-existing/--no-skip-existing", default=True)
-def download(project_name, recording_url, skip_existing):
+def download(recording_url: str, project_name: str = None, skip_existing: bool = True):
     dw = downloader.Downloader(recording_url, project_name)
 
-    logger.info(f"Downloading all needed files in {dw.root_path}")
+    typer.echo(f"Downloading all needed files in {dw.root_path}")
     dw.download_all(skip_existing)
 
 
 @cli.command()
-@click.option("--project-id", default=None)
-def clean(project_id):
+def clean(project_id: str = None):
     for project in constants.DATA_PATH.glob(project_id if project_id else "*"):
         if project.is_file():
             continue
 
-        click.echo(f"Deleting folder {project}? [yN]")
+        typer.echo(f"Deleting folder {project}? [yN]")
         if input() in {"y", "Y"}:
             shutil.rmtree(project)
 
 
 @cli.command()
-@click.argument("project_id")
-@click.option("--bg-image", default=None)
-@click.option("--title", default=None)
-@click.option("--relator", default=None)
-@click.option("--preview/--no-preview", default=False)
-@click.option("--start", default=None)
-@click.option("--duration", default=None)
-def compose(project_id, bg_image, title, relator, preview, start, duration):
+def compose(
+    project_id: str,
+    bg_image: pathlib.Path = "assets/bg-clinux_720p.png",
+    title: str = "",
+    relator: str = "",
+    preview: bool = False,
+    start: int = None,
+    duration: int = None,
+):
     size = (1280, 720)
     font = "Open-Sans-Regular"
 
@@ -52,7 +47,7 @@ def compose(project_id, bg_image, title, relator, preview, start, duration):
     webcam = (400, 300)
     desk_share = (813, 457)
 
-    c.add_background_image(bg_image if bg_image else "assets/bg-clinux_720p.png")
+    c.add_background_image(bg_image)
 
     c.add_desk_share(desk_share, (440, 120))
     c.add_webcam(webcam, (27, 120))

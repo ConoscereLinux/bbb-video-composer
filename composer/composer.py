@@ -35,7 +35,9 @@ class Composer:
         movie = moviepy.editor.CompositeVideoClip(self._clips, size=self.size)
         movie.save_frame(str(self._base_dir / "out.png"), t=0)
 
-    def render(self, path: str = None, /, start: float = 0, duration: float = None, **kwargs):
+    def render(
+        self, path: str = None, /, start: float = 0, duration: float = None, **kwargs
+    ):
         if not self._clips:
             raise Exception("You need to add at least one clip")
 
@@ -59,9 +61,9 @@ class Composer:
         color = hex_to_rgb(color)
         self.add_clip(moviepy.editor.ColorClip(size=self.size, color=color))
 
-    def add_background_image(self, path: str):
+    def add_background_image(self, path: pathlib.Path | str):
         if pathlib.Path(path).exists():
-            self.add_clip(moviepy.editor.ImageClip(path).resize(self.size))
+            self.add_clip(moviepy.editor.ImageClip(str(path)).resize(self.size))
 
     def add_text(self, txt: str, size: Size, position: Position, **kwargs):
         clip = moviepy.editor.TextClip(txt=txt, size=size, **kwargs)
