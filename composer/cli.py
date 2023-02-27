@@ -68,4 +68,4 @@ def compose(project_id, bg_image, title, relator, preview, start, duration):
     if preview:
         c.preview()
     else:
-        c.render(fps=24, threads=os.cpu_count(), start=start, duration=duration)
+        c.render(start=start, duration=duration, fps=24, threads=os.cpu_count())
