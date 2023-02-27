@@ -26,3 +26,4 @@ $ python -m composer compose <project id> --title <Course title> --relator <rela
 - [x] Permit creation of clip
 - [ ] Add optional output path
 - [ ] add routine to create parts for a single video
+- [ ] move from click to typer
