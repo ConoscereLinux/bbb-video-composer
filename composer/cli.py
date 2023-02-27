@@ -41,7 +41,9 @@ def clean(project_id):
 @click.option("--title", default=None)
 @click.option("--relator", default=None)
 @click.option("--preview/--no-preview", default=False)
-def compose(project_id, bg_image, title, relator, preview):
+@click.option("--start", default=None)
+@click.option("--duration", default=None)
+def compose(project_id, bg_image, title, relator, preview, start, duration):
     size = (1280, 720)
     font = "Open-Sans-Regular"
 
@@ -66,4 +68,4 @@ def compose(project_id, bg_image, title, relator, preview):
     if preview:
         c.preview()
     else:
-        c.render(fps=24, threads=os.cpu_count())
+        c.render(fps=24, threads=os.cpu_count(), start=start, duration=duration)

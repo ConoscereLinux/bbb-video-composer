@@ -35,7 +35,7 @@ class Composer:
         movie = moviepy.editor.CompositeVideoClip(self._clips, size=self.size)
         movie.save_frame(str(self._base_dir / "out.png"), t=0)
 
-    def render(self, duration: float = None, **kwargs):
+    def render(self, duration: float = None, start: int = None, **kwargs):
         if not self._clips:
             raise Exception("You need to add at least one clip")
 
@@ -43,6 +43,8 @@ class Composer:
 
         movie = moviepy.editor.CompositeVideoClip(self._clips, size=self.size)
         movie = movie.set_duration(duration if duration else self.duration)
+        if start:
+            movie = movie.set_start(start, change_end=True)
 
         movie.write_videofile(str(self._base_dir / "out.mp4"), **kwargs)
 

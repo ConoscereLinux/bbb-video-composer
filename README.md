@@ -23,3 +23,6 @@ $ python -m composer compose <project id> --title <Course title> --relator <rela
 ## Road Map
 - [ ] (download) make option project_name not optional
 - [ ] (download) permit usage of only meeting_id instead of full url
+- [x] Permit creation of clip
+- [ ] Add optional output path
+- [ ] add routine to create parts for a single video
