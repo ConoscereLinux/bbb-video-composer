@@ -29,16 +29,7 @@ def clean(project_id: str = None):
             shutil.rmtree(project)
 
 
-@cli.command()
-def compose(
-    project_id: str,
-    bg_image: pathlib.Path = "assets/bg-clinux_720p.png",
-    title: str = "",
-    relator: str = "",
-    preview: bool = False,
-    start: int = None,
-    duration: int = None,
-):
+def _prepare_course(project_id: str, bg_image: pathlib.Path, title: str, relator: str):
     size = (1280, 720)
     font = "Open-Sans-Regular"
 
@@ -60,7 +51,42 @@ def compose(
     if relator:
         c.add_text(relator, (384, 54), (35, 480), color="white", font=font)
 
+    return c
+
+
+@cli.command()
+def compose(
+    project_id: str,
+    bg_image: pathlib.Path = "assets/bg-clinux_720p.png",
+    title: str = "",
+    relator: str = "",
+    preview: bool = False,
+    start: int = None,
+    duration: int = None,
+):
+    c = _prepare_course(project_id, bg_image, title, relator)
+
     if preview:
         c.preview()
     else:
         c.render(start=start, duration=duration, fps=24, threads=os.cpu_count())
+
+
+@cli.command()
+def parts(
+    project_id: str,
+    parts: int,
+    only_part: int = None,
+    bg_image: pathlib.Path = "assets/bg-clinux_720p.png",
+    title: str = "",
+    relator: str = "",
+):
+    c = _prepare_course(project_id, bg_image, title, relator)
+    duration = c.duration / parts
+
+    for i in range(parts):
+        if only_part and only_part != i:
+            continue
+        start = i * duration
+        path = str(constants.DATA_PATH / project_id / f"out_{i:02}.mp4")
+        c.render(path, start=start, duration=duration, fps=24, threads=os.cpu_count())
