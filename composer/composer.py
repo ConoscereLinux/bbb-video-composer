@@ -8,6 +8,7 @@ from .constants import DATA_PATH
 
 Size = tuple[int, int]
 Position = tuple[int, int]
+Time = float | tuple[int, int] | tuple[int, int, int] | str
 
 
 def hex_to_rgb(color: str):
@@ -36,19 +37,28 @@ class Composer:
         movie.save_frame(str(self._base_dir / "out.png"), t=0)
 
     def render(
-        self, path: str = None, /, start: float = 0, duration: float = None, **kwargs
+        self,
+        path: str = None,
+        /,
+        fps: int = 24,
+        duration: Time = None,
+        start: Time = 0,
+        end: Time = None,
+        **kwargs,
     ):
         if not self._clips:
             raise Exception("You need to add at least one clip")
 
         movie = moviepy.editor.CompositeVideoClip(self._clips, size=self.size)
         movie = movie.set_duration(duration if duration else self.duration)
-        movie = movie.set_start(start, change_end=True)
+        if start or end:
+            movie = movie.subclip(t_start=start, t_end=end)
 
         if path is None:
             path = str(self._base_dir / "out.mp4")
 
         kwargs.setdefault("temp_audiofile", self._base_dir / "temp_audio.mp3")
+        kwargs.setdefault("fps", fps)
 
         movie.write_videofile(path, **kwargs)
 

@@ -6,7 +6,6 @@ import typer
 
 from . import composer, constants, downloader
 
-
 cli = typer.Typer()
 
 
@@ -61,32 +60,34 @@ def compose(
     title: str = "",
     relator: str = "",
     preview: bool = False,
-    start: int = None,
-    duration: int = None,
+    start: float = None,
+    duration: float = None,
 ):
     c = _prepare_course(project_id, bg_image, title, relator)
 
     if preview:
         c.preview()
     else:
-        c.render(start=start, duration=duration, fps=24, threads=os.cpu_count())
+        c.render(start=start, duration=duration, threads=os.cpu_count())
 
 
 @cli.command()
 def parts(
     project_id: str,
-    parts: int,
+    n_parts: int,
     only_part: int = None,
     bg_image: pathlib.Path = "assets/bg-clinux_720p.png",
     title: str = "",
     relator: str = "",
 ):
     c = _prepare_course(project_id, bg_image, title, relator)
-    duration = c.duration / parts
+    duration = c.duration / n_parts
 
-    for i in range(parts):
+    for i in range(n_parts):
         if only_part and only_part != i:
             continue
+
         start = i * duration
+
         path = str(constants.DATA_PATH / project_id / f"out_{i:02}.mp4")
-        c.render(path, start=start, duration=duration, fps=24, threads=os.cpu_count())
+        c.render(path, start=start, end=start + duration, threads=os.cpu_count())
