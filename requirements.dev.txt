@@ -14,15 +14,15 @@ charset-normalizer==3.0.1
     # via requests
 click==8.1.3
     # via
-    #   bbb-video-composer (pyproject.toml)
     #   black
+    #   typer
 decorator==4.4.2
     # via moviepy
 exceptiongroup==1.1.0
     # via pytest
 idna==3.4
     # via requests
-imageio==2.25.0
+imageio==2.26.0
     # via moviepy
 imageio-ffmpeg==0.4.8
     # via moviepy
@@ -36,7 +36,7 @@ moviepy==1.0.3
     # via bbb-video-composer (pyproject.toml)
 mypy-extensions==1.0.0
     # via black
-numpy==1.24.1
+numpy==1.24.2
     # via
     #   imageio
     #   moviepy
@@ -48,7 +48,7 @@ pathspec==0.11.0
     # via black
 pillow==9.4.0
     # via imageio
-platformdirs==2.6.2
+platformdirs==3.0.0
     # via black
 pluggy==1.0.0
     # via pytest
@@ -66,5 +66,7 @@ tqdm==4.64.1
     # via
     #   moviepy
     #   proglog
+typer==0.7.0
+    # via bbb-video-composer (pyproject.toml)
 urllib3==1.26.14
     # via requests
