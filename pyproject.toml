@@ -2,7 +2,7 @@
 requires = ["setuptools", "wheel"]
 
 [tool.setuptools.packages.find]
-include = ["demo"]  
+include = ["composer"]  
 
 [project]
 name = "bbb-video-composer"
