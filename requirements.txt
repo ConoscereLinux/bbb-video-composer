@@ -26,6 +26,9 @@ numpy==1.26.2
     # via
     #   imageio
     #   moviepy
+    #   opencv-python
+opencv-python==4.8.1.78
+    # via bbb-video-composer (pyproject.toml)
 pillow==10.0.1
     # via imageio
 proglog==0.1.10
