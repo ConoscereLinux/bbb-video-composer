@@ -22,8 +22,8 @@ clean:
 .PHONY: venv
 venv: clean
 	@echo -e $(bold)Create virtualenv$(sgr0)
-	python3 -m venv $(VENV)
-	$(pip) install --upgrade pip pip-tools
+	@python3 -m venv $(VENV)
+	@$(pip) install --upgrade pip pip-tools
 
 
 .PHONY: develop
@@ -36,11 +36,11 @@ develop:
 
 .PHONY: requirements
 requirements:
-	$(python) -m piptools compile --upgrade \
+	@$(python) -m piptools compile --upgrade \
 				--resolver backtracking \
 				--output-file requirements.txt \
 				pyproject.toml
 				
 .PHONY: tests
 tests:
-	$(python) -m pytest
+	@$(python) -m pytest
