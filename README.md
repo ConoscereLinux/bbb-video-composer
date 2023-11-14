@@ -12,7 +12,7 @@ $ make bootstrap
 # If you want a more standard approach
 $ python -m venv .venv
 $ source .venv/bin/activate
-(.venv)$ pip install -r requirements.dev.txt --editable .
+(.venv)$ pip install -r requirements.txt --editable .[develop,testing]
 ```
 
 ## How to use

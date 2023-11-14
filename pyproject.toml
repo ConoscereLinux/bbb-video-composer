@@ -15,5 +15,5 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["black", "isort"]
-test = ["pytest"]
+develop = ["black", "isort"]
+testing = ["pytest"]
